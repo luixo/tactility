@@ -1,0 +1,5 @@
+.history
+.yarn
+.tanstack
+.output
+*.gen.ts
