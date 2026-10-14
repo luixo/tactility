@@ -3,7 +3,7 @@ import { MutationCache, type QueryClientConfig } from "@tanstack/react-query";
 export const queryClientConfig: QueryClientConfig = {
   mutationCache: new MutationCache({
     onError: (error) => {
-      // @ts-expect-error add toast
+      // TODO: replace console output with a toast.
       console.error({
         title: "Ошибка",
         description: error.message,

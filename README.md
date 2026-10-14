@@ -4,13 +4,14 @@ A game of spicy cards with websockets
 
 ### Prerequisites
 
+You'll need Bun and Node.js (see `packageManager` and `engines` in `package.json`).
+
 ```sh
-corepack enable
-yarn
+bun install
 ```
 
 ### Development
 
 ```sh
-yarn dev
+bun run dev
 ```

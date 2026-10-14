@@ -104,6 +104,6 @@ export default ts.config(
   },
   {
     // see https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-    ignores: [".history/", "**/*.gen.*"],
+    ignores: [".history/", "dist/", "**/*.gen.*"],
   },
 );
