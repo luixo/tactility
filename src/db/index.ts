@@ -1,6 +1,7 @@
 import { createServerOnlyFn } from "@tanstack/react-start";
 import { Kysely, PostgresDialect, sql } from "kysely";
-import { Pool, type PoolConfig } from "pg";
+import { Pool } from "pg";
+import type { PoolConfig } from "pg";
 import type { DB } from "~/db/database.gen";
 
 const getDatabaseConfig = (): PoolConfig => {

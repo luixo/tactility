@@ -1,22 +1,8 @@
-import { createServerOnlyFn } from "@tanstack/react-start";
-import { setResponseHeader } from "@tanstack/react-start/server";
+import { setCookie } from "@tanstack/react-start/server";
 import { getDatabase } from "~/db";
-import { getSetAuthCookie } from "~/server/auth";
-import { getRequest } from "~/server/request";
 import type { UserId } from "~/server/validation";
-import { YEAR } from "~/utils/time";
-
-const upsertUserCookie = createServerOnlyFn((userId: UserId) =>
-	setResponseHeader(
-		"set-cookie",
-		getSetAuthCookie(userId, new Date(Date.now() + YEAR)),
-	),
-);
-export const updateUser = async (userId: UserId) => {
-	const userAgent = getRequest().headers.get("user-agent") || "unknown";
-	await upsertUser(userId, userAgent);
-	upsertUserCookie(userId);
-};
+import { USER_ID_COOKIE } from "~/utils/auth";
+import { getUserAgent } from "~/utils/isomorphic";
 
 export const upsertUser = async (userId: UserId, userAgent: string) => {
 	const db = getDatabase();
@@ -25,7 +11,13 @@ export const upsertUser = async (userId: UserId, userAgent: string) => {
 		.where("id", "=", userId)
 		.select(["id", "name"])
 		.executeTakeFirst();
-	if (!user) {
+	if (user) {
+		void db
+			.updateTable("users")
+			.where("users.id", "=", userId)
+			.set({ updatedAt: new Date() })
+			.executeTakeFirst();
+	} else {
 		const newUser = await db
 			.insertInto("users")
 			.values({
@@ -35,12 +27,12 @@ export const upsertUser = async (userId: UserId, userAgent: string) => {
 			.returning(["users.id", "users.name"])
 			.executeTakeFirstOrThrow();
 		return newUser;
-	} else {
-		void db
-			.updateTable("users")
-			.where("users.id", "=", userId)
-			.set({ updatedAt: new Date() })
-			.executeTakeFirst();
 	}
 	return user;
+};
+
+export const updateUser = async (userId: UserId) => {
+	const userAgent = getUserAgent();
+	await upsertUser(userId, userAgent);
+	setCookie(USER_ID_COOKIE, userId);
 };

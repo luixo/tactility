@@ -1,22 +1,23 @@
-import { type Config, IdentifierNode } from "kysely-codegen";
+import { IdentifierNode } from "kysely-codegen";
+import type { Config } from "kysely-codegen";
 import { entries, fromEntries } from "remeda";
 
 const TYPES = {
-	user: new IdentifierNode("UserId"),
 	game: new IdentifierNode("GameId"),
+	user: new IdentifierNode("UserId"),
 };
 // UserId, GameId
 
 const config: Config = {
-	outFile: "src/db/database.gen.ts",
 	customImports: fromEntries(
 		entries(TYPES).map(([, value]) => [value.name, "~/server/validation"]),
 	),
+	outFile: "src/db/database.gen.ts",
 	overrides: {
 		columns: {
-			"users.id": TYPES.user,
 			"games.id": TYPES.game,
 			"games.ownerId": TYPES.user,
+			"users.id": TYPES.user,
 		},
 	},
 };

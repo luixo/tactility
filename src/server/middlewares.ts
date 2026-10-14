@@ -1,16 +1,15 @@
 import { createMiddleware } from "@tanstack/react-start";
-import { setResponseHeader } from "@tanstack/react-start/server";
+import { setCookie } from "@tanstack/react-start/server";
 import { TRPCError } from "@trpc/server";
-import { parse } from "cookie";
-import { getExtendedAuthCookie } from "~/server/auth";
 import { upsertUser } from "~/server/user";
 import type { UserId } from "~/server/validation";
 import { userIdSchema } from "~/server/validation";
 import { SESSION_ID_HEADER, USER_ID_COOKIE } from "~/utils/auth";
+import { getCookies } from "~/utils/isomorphic";
 
 export const authMiddleware = createMiddleware().server(
 	async ({ next, request }) => {
-		const cookies = parse(request.headers.get("cookie") ?? "");
+		const cookies = await getCookies();
 		const userIdCookie = cookies[USER_ID_COOKIE] as UserId | undefined;
 		if (!userIdCookie) {
 			throw new TRPCError({
@@ -30,11 +29,11 @@ export const authMiddleware = createMiddleware().server(
 			userIdCookie,
 			request.headers.get("user-agent") || "unknown",
 		);
-		setResponseHeader(...getExtendedAuthCookie(user.id));
+		setCookie(USER_ID_COOKIE, user.id);
 		return next({
 			context: {
-				userId: user.id,
 				sessionId,
+				userId: user.id,
 			},
 		});
 	},

@@ -13,8 +13,8 @@ export const DefaultCatchBoundary: React.FC<ErrorComponentProps> = ({
 }) => {
 	const router = useRouter();
 	const isRoot = useMatch({
-		strict: false,
 		select: (state) => state.id === rootRouteId,
+		strict: false,
 	});
 	console.error("Error component:", error);
 
@@ -22,13 +22,7 @@ export const DefaultCatchBoundary: React.FC<ErrorComponentProps> = ({
 		<div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-4">
 			<ErrorComponent error={error} />
 			<div className="flex flex-wrap items-center gap-2">
-				<Button
-					onPress={() => {
-						router.invalidate();
-					}}
-				>
-					Try Again
-				</Button>
+				<Button onPress={() => router.invalidate()}>Try Again</Button>
 				{isRoot ? (
 					<Button asChild variant="secondary">
 						<Link to="/">Home</Link>

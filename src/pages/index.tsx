@@ -28,7 +28,7 @@ const PreviousGame: React.FC<{
 	return (
 		<Button
 			onPress={() =>
-				router.navigate({ to: "/games/$id", params: { id: game.id } })
+				router.navigate({ params: { id: game.id }, to: "/games/$id" })
 			}
 		>
 			{t("pages.index.resumeGame.button", {
@@ -70,6 +70,7 @@ const PreviousGamesCard = suspendedFallback(
 	},
 	<PreviousGamesCardWrapper>
 		{Array.from({ length: 3 }).map((_, index) => (
+			// oxlint-disable-next-line react/no-array-index-key
 			<Skeleton key={index} className="h-10 w-full rounded-lg" />
 		))}
 	</PreviousGamesCardWrapper>,
@@ -87,7 +88,7 @@ const CreateGameCard = () => {
 				gamesQueryOptions,
 			)((prevGames) => [...prevGames, game.id]);
 			updateCache(queryClient, getGameQueryOptions(game.id))(game);
-			router.navigate({ to: "/games/$id", params: { id: game.id } });
+			return router.navigate({ params: { id: game.id }, to: "/games/$id" });
 		},
 	});
 	return (
@@ -142,7 +143,7 @@ const JoinGameCard = () => {
 						if (slug.length !== GAMES.TYPES.ID_LENGTH) {
 							return;
 						}
-						router.navigate({ to: "/games/$id", params: { id: slug } });
+						return router.navigate({ params: { id: slug }, to: "/games/$id" });
 					}}
 					isDisabled={!slug}
 				>

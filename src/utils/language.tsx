@@ -31,7 +31,7 @@ type ValidatedResources = AssertAllEqual<
 >;
 
 declare module "i18next" {
-	// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+	// oxlint-disable-next-line @typescript-eslint/consistent-type-definitions
 	interface CustomTypeOptions {
 		defaultNS: "default";
 		resources: ValidatedResources extends never ? never : Resources;

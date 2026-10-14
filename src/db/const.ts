@@ -2,31 +2,31 @@ import { sql } from "kysely";
 
 export const COMMON = {
 	createdAtColumn: "createdAt",
-	updatedAtColumn: "updatedAt",
 	nowTimestamp: sql`CURRENT_TIMESTAMP`,
+	updatedAtColumn: "updatedAt",
 };
 
 export const GAMES = {
-	TABLE: "games",
-	TYPES: {
-		ID_LENGTH: 12,
-		ID_ALPHABET: "1234567890abcdef",
-	},
 	INDEXES: {
 		OWNER_ID: "games:ownerId:index",
 	},
+	TABLE: "games",
 	TRIGGERS: {
 		UPDATE_TIMESTAMP: "games:updateTimestamp",
+	},
+	TYPES: {
+		ID_ALPHABET: "1234567890abcdef",
+		ID_LENGTH: 12,
 	},
 } as const;
 
 export const USERS = {
 	TABLE: "users",
-	TYPES: {
-		NAME_LENGTH: 255,
-	},
 	TRIGGERS: {
 		UPDATE_TIMESTAMP: "users:updateTimestamp",
+	},
+	TYPES: {
+		NAME_LENGTH: 255,
 	},
 } as const;
 

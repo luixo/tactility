@@ -4,16 +4,16 @@ import type { UserId } from "~/server/validation";
 import { USER_ID_COOKIE } from "~/utils/auth";
 import { YEAR } from "~/utils/time";
 
-export const setUserId = (userId: UserId) => {
-	window.cookieStore.delete({
+export const setUserId = async (userId: UserId) => {
+	await window.cookieStore.delete({
 		name: USER_ID_COOKIE,
 		path: "/",
 	});
-	window.cookieStore.set({
-		name: USER_ID_COOKIE,
-		value: userId,
+	await window.cookieStore.set({
 		expires: new Date(Date.now() + YEAR).valueOf(),
+		name: USER_ID_COOKIE,
 		path: "/",
+		value: userId,
 	});
 };
 

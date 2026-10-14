@@ -17,11 +17,11 @@ export const getPusherInstance = (): Pusher => {
 		throw new Error("Expected to have 'PUSHER_SECRET' environment variable");
 	}
 	pusherInstance ??= new Pusher({
-		host: process.env["VITE_PUSHER_HOST"],
-		useTLS: true,
 		appId: process.env["PUSHER_APP_ID"],
+		host: process.env["VITE_PUSHER_HOST"],
 		key: process.env["VITE_PUSHER_APP_KEY"],
 		secret: process.env["PUSHER_SECRET"],
+		useTLS: true,
 	});
 	return pusherInstance;
 };

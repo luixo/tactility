@@ -10,9 +10,6 @@ import importGraph from "vite-plugin-import-graph";
 const useAnalyzer = Boolean(process.env["ANALYZER"]);
 
 export default defineConfig({
-	resolve: {
-		tsconfigPaths: true,
-	},
 	plugins: [
 		devtools(),
 		chromeDevtools(),
@@ -27,4 +24,7 @@ export default defineConfig({
 		}),
 		tailwindcss(),
 	],
+	resolve: {
+		tsconfigPaths: true,
+	},
 });

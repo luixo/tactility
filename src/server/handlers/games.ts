@@ -6,7 +6,8 @@ import { z } from "zod";
 import { getDatabase } from "~/db";
 import { GAMES } from "~/db/const";
 import { authMiddleware } from "~/server/middlewares";
-import { type GameId, gameIdSchema } from "~/server/validation";
+import { gameIdSchema } from "~/server/validation";
+import type { GameId } from "~/server/validation";
 
 export const getGames = createServerFn()
 	.middleware([authMiddleware])
@@ -17,8 +18,8 @@ export const getGames = createServerFn()
 	});
 
 export const gamesQueryOptions = queryOptions({
-	queryKey: ["games"],
 	queryFn: ({ signal }) => getGames({ signal }),
+	queryKey: ["games"],
 });
 
 export const getGame = createServerFn()
@@ -39,8 +40,8 @@ export const getGame = createServerFn()
 
 export const getGameQueryOptions = (id: GameId) =>
 	queryOptions({
+		queryFn: ({ signal }) => getGame({ data: { id }, signal }),
 		queryKey: ["game", id],
-		queryFn: ({ signal }) => getGame({ signal, data: { id } }),
 	});
 
 const nanoid = customAlphabet(GAMES.TYPES.ID_ALPHABET, GAMES.TYPES.ID_LENGTH);
@@ -68,6 +69,6 @@ export const putGame = createServerFn()
 	});
 
 export const putGameMutationOptions = mutationOptions({
-	mutationKey: ["game", "put"],
 	mutationFn: () => putGame(),
+	mutationKey: ["game", "put"],
 });

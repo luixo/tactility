@@ -6,7 +6,7 @@ import { baseLanguage, defaultNamespace, languages } from "~/utils/language";
 
 export const getBackendModule = (): BackendModule => ({
 	type: "backend",
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	// oxlint-disable-next-line @typescript-eslint/no-empty-function
 	init: () => {},
 	read: async (language, namespace) => {
 		try {
@@ -24,9 +24,9 @@ export const getBackendModule = (): BackendModule => ({
 			}
 			const response = await fetch(`/locales/${language}/${namespace}.json`);
 			return await (response.json() as Promise<ResourceKey>);
-		} catch (e) {
+		} catch (error) {
 			console.error(`Failed to load ${language}/${namespace} i18n translation`);
-			throw e;
+			throw error;
 		}
 	},
 });
@@ -38,11 +38,11 @@ const isLanguage = (input: string): input is Language =>
 
 type Strategy = "cookie" | "header" | "baseLocale";
 const strategies: Strategy[] = ["cookie", "header", "baseLocale"];
-export const getLanguage = () => {
+export const getLanguage = async () => {
 	for (const strategy of strategies) {
 		switch (strategy) {
 			case "cookie": {
-				const cookies = getCookies();
+				const cookies = await getCookies();
 				const cookieLanguage = cookies[COOKIE_LANGUAGE_NAME] ?? "";
 				if (isLanguage(cookieLanguage)) {
 					return cookieLanguage;
@@ -67,14 +67,14 @@ export const getLanguage = () => {
 };
 
 export const i18nInitOptions: InitOptions = {
-	fallbackLng: baseLanguage,
 	defaultNS: defaultNamespace,
-	ns: [defaultNamespace],
-	supportedLngs: keys(languages),
+	fallbackLng: baseLanguage,
 	interpolation: {
 		// React doesn't need to escape values
 		escapeValue: false,
 	},
-	postProcess: "capitalize",
+	ns: [defaultNamespace],
 	partialBundledLanguages: true,
+	postProcess: "capitalize",
+	supportedLngs: keys(languages),
 };

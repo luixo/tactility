@@ -38,6 +38,7 @@ export type RouterContext = {
 };
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+	component: RootComponent,
 	validateSearch: z.object({
 		debug: z.coerce.boolean().optional().catch(false),
 	}),
@@ -49,11 +50,21 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			title: context.i18n.getTranslation()("common.title"),
 		};
 	},
-	component: RootComponent,
+	shellComponent: ({ children }) => (
+		<html lang="en" className="dark">
+			<head>
+				<HeadContent />
+			</head>
+			<body className="mx-auto max-w-2xl p-4">
+				<main>{children}</main>
+				<Scripts />
+			</body>
+		</html>
+	),
 	head: ({ loaderData }) => ({
 		meta: [
 			{
-				charSet: "utf-8",
+				charSet: "utf8",
 			},
 			{
 				name: "viewport",
@@ -84,15 +95,4 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			{ rel: "icon", href: "/favicon.ico" },
 		],
 	}),
-	shellComponent: ({ children }) => (
-		<html lang="en" className="dark">
-			<head>
-				<HeadContent />
-			</head>
-			<body className="mx-auto max-w-2xl p-4">
-				<main>{children}</main>
-				<Scripts />
-			</body>
-		</html>
-	),
 });

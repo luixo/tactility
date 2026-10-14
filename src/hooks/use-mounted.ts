@@ -1,9 +1,8 @@
 import React from "react";
 
-export const useMounted = () => {
-	const [isMounted, setMounted] = React.useState(false);
-	React.useEffect(() => {
-		setMounted(true);
-	}, []);
-	return isMounted;
-};
+const subscribe = () => () => undefined;
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
+
+export const useMounted = () =>
+	React.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);

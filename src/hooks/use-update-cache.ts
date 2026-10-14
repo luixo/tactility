@@ -11,8 +11,7 @@ export const updateCache =
 	) =>
 	(setStateAction: React.SetStateAction<Output>) => {
 		let savedPrevValue: Output | undefined;
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		queryClient.setQueryData<Output>(queryFilters.queryKey!, (prevOutput) => {
+		queryClient.setQueryData<Output>(queryFilters.queryKey, (prevOutput) => {
 			if (prevOutput === undefined) {
 				return;
 			}

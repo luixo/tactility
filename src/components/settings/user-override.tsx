@@ -45,9 +45,9 @@ export const UserOverride = () => {
 			<Button
 				className="z-10"
 				variant="secondary"
-				onPress={() => {
+				onPress={async () => {
+					await setUserId(localUserId);
 					setUser((prevUser) => ({ ...prevUser, id: localUserId }));
-					setUserId(localUserId);
 					queryClient.clear();
 				}}
 			>

@@ -20,6 +20,6 @@ export const getUser = createServerFn()
 	});
 
 export const userQueryOptions = queryOptions({
-	queryKey: ["user"],
 	queryFn: ({ signal }) => getUser({ signal }),
+	queryKey: ["user"],
 });

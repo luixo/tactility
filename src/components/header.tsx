@@ -9,20 +9,21 @@ import { Settings } from "~/components/settings/settings";
 const HEADER_PORTAL_ID = "header-children";
 
 export const HeaderPortal: React.FC<PropsWithChildren> = ({ children }) => (
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	<>{createPortal(children, document.getElementById(HEADER_PORTAL_ID)!)}</>
+	// oxlint-disable-next-line @typescript-eslint/no-non-null-assertion
+	<>{createPortal(children, document.querySelector(`#${HEADER_PORTAL_ID}`)!)}</>
 );
 
 export const Header: React.FC = () => {
 	const router = useRouter();
 	return (
 		<div className="items-cneter flex justify-between gap-4">
-			<span
-				className="flex size-16 shrink-0 cursor-pointer items-center justify-center rounded bg-conic/decreasing bg-gradient-to-tr from-blue-200 via-pink-500 to-pink-800 text-xl font-extrabold"
+			<button
+				type="button"
+				className="flex size-16 shrink-0 cursor-pointer items-center justify-center rounded bg-conic/decreasing from-blue-200 via-pink-500 to-pink-800 text-xl font-extrabold"
 				onClick={() => router.navigate({ to: "/" })}
 			>
 				TCT
-			</span>
+			</button>
 			<div
 				id={HEADER_PORTAL_ID}
 				className="flex flex-col items-center justify-center"

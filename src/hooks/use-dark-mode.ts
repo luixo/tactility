@@ -18,11 +18,7 @@ export const useDarkMode = () => {
 	});
 	const actualMode = mode === "auto" ? autoMode : mode;
 	React.useEffect(() => {
-		if (actualMode === "dark") {
-			document.documentElement.classList.add("dark");
-		} else {
-			document.documentElement.classList.remove("dark");
-		}
+		document.documentElement.classList.toggle("dark", actualMode === "dark");
 	}, [actualMode]);
 	return [isMounted ? actualMode : "auto", setMode] as const;
 };

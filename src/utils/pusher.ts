@@ -10,13 +10,19 @@ import { transformer } from "~/utils/transformer";
 
 export const getChannelName = (gameId: GameId) => `game-${gameId}`;
 
+const {
+	VITE_PUSHER_APP_KEY = "",
+	VITE_PUSHER_CLUSTER = "",
+	VITE_PUSHER_HOST = "",
+} = import.meta.env;
+
 let pusherInstance: Pusher | undefined;
 const getPusherInstance = (): Pusher => {
-	pusherInstance ??= new Pusher(import.meta.env["VITE_PUSHER_APP_KEY"] ?? "", {
-		cluster: import.meta.env["VITE_PUSHER_CLUSTER"] ?? "",
-		wsHost: import.meta.env["VITE_PUSHER_HOST"],
-		forceTLS: true,
+	pusherInstance ??= new Pusher(VITE_PUSHER_APP_KEY, {
+		cluster: VITE_PUSHER_CLUSTER,
 		enabledTransports: ["ws", "wss"],
+		forceTLS: true,
+		wsHost: VITE_PUSHER_HOST,
 	});
 	return pusherInstance;
 };
@@ -46,7 +52,6 @@ const useChannel = (channelName: string) => {
 				);
 				if (channelObject.subscribers.length === 0) {
 					instance.unsubscribe(channelName);
-					// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 					delete channelSubscriptions[channelName];
 				}
 			};
@@ -78,7 +83,7 @@ export const useBindSubscription = (channelName: string) => {
 					return;
 				}
 				timestamps[event] = timestamp;
-				onData(deserializedData as unknown as SubscriptionMapping[K]);
+				onData(deserializedData);
 			}),
 	);
 };

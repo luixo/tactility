@@ -11,21 +11,26 @@ import { getCookies } from "~/utils/isomorphic";
 import { queryClientConfig } from "~/utils/query";
 import { getUserId } from "~/utils/user";
 import { routeTree } from "./routeTree.gen";
+import { getLanguage } from "./utils/i18n-internal";
 
 export const getRouter = async () => {
-	const userId = await getUserId(getCookies());
+	const userId = getUserId(await getCookies());
 	if (import.meta.env.SSR) {
 		await checkConnectivity();
 		await updateUser(userId);
 	}
 	const queryClient = new QueryClient(queryClientConfig);
-	const i18n = createI18nContext();
+	const i18n = createI18nContext(await getLanguage());
 	const router = createTanStackRouter({
+		Wrap: ({ children }) => <i18n.Provider>{children}</i18n.Provider>,
 		context: {
-			userId,
-			queryClient,
 			i18n,
+			queryClient,
+			userId,
 		},
+		defaultErrorComponent: DefaultCatchBoundary,
+		defaultNotFoundComponent: NotFound,
+		defaultPendingComponent: Spinner,
 		dehydrate: () => ({
 			i18n: i18n.serializeContext(),
 		}),
@@ -33,17 +38,13 @@ export const getRouter = async () => {
 			await i18n.onHydrate(dehydratedData.i18n);
 		},
 		routeTree,
-		defaultErrorComponent: DefaultCatchBoundary,
-		defaultNotFoundComponent: NotFound,
-		defaultPendingComponent: Spinner,
-		Wrap: ({ children }) => <i18n.Provider>{children}</i18n.Provider>,
 	});
-	setupRouterSsrQueryIntegration({ router, queryClient });
+	setupRouterSsrQueryIntegration({ queryClient, router });
 	return router;
 };
 
 declare module "@tanstack/react-router" {
-	// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+	// oxlint-disable-next-line @typescript-eslint/consistent-type-definitions
 	interface Register {
 		router: Awaited<ReturnType<typeof getRouter>>;
 	}

@@ -5,8 +5,8 @@ import type { Language } from "~/utils/language";
 import { languages } from "~/utils/language";
 
 const LOCALE_NAMES: Partial<Record<Language, string>> = {
-	ru: "Русский",
 	en: "English",
+	ru: "Русский",
 };
 
 export const LangSwitcher = () => {

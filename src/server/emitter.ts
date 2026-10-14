@@ -24,8 +24,8 @@ export const getEmitter = (
 				event,
 				transformer.serialize({
 					...data,
-					timestamp: Date.now(),
 					sessionId: context.sessionId,
+					timestamp: Date.now(),
 				}),
 			),
 	};
