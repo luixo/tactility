@@ -10,21 +10,21 @@ import importGraph from "vite-plugin-import-graph";
 const useAnalyzer = Boolean(process.env["ANALYZER"]);
 
 export default defineConfig({
-  resolve: {
-    tsconfigPaths: true,
-  },
-  plugins: [
-    devtools(),
-    chromeDevtools(),
-    ...(useAnalyzer
-      ? [unstableRolldownAdapter(analyzer()), importGraph()]
-      : []),
-    tanstackStart(),
-    viteReact({
-      babel: {
-        plugins: ["babel-plugin-react-compiler"],
-      },
-    }),
-    tailwindcss(),
-  ],
+	resolve: {
+		tsconfigPaths: true,
+	},
+	plugins: [
+		devtools(),
+		chromeDevtools(),
+		...(useAnalyzer
+			? [unstableRolldownAdapter(analyzer()), importGraph()]
+			: []),
+		tanstackStart(),
+		viteReact({
+			babel: {
+				plugins: ["babel-plugin-react-compiler"],
+			},
+		}),
+		tailwindcss(),
+	],
 });

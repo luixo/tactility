@@ -1,30 +1,28 @@
 import React from "react";
-
 import { useLocalStorage } from "usehooks-ts";
-
 import { useMounted } from "~/hooks/use-mounted";
 
 export const useDarkMode = () => {
-  const [mode, setMode] = useLocalStorage<"light" | "dark" | "auto">(
-    "color-mode",
-    "auto",
-  );
-  const isMounted = useMounted();
-  const [autoMode] = React.useState<"light" | "dark">(() => {
-    if (typeof window === "undefined") {
-      return "light";
-    }
-    return window.matchMedia("(prefers-color-scheme:dark)").matches
-      ? "dark"
-      : "light";
-  });
-  const actualMode = mode === "auto" ? autoMode : mode;
-  React.useEffect(() => {
-    if (actualMode === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [actualMode]);
-  return [isMounted ? actualMode : "auto", setMode] as const;
+	const [mode, setMode] = useLocalStorage<"light" | "dark" | "auto">(
+		"color-mode",
+		"auto",
+	);
+	const isMounted = useMounted();
+	const [autoMode] = React.useState<"light" | "dark">(() => {
+		if (typeof window === "undefined") {
+			return "light";
+		}
+		return window.matchMedia("(prefers-color-scheme:dark)").matches
+			? "dark"
+			: "light";
+	});
+	const actualMode = mode === "auto" ? autoMode : mode;
+	React.useEffect(() => {
+		if (actualMode === "dark") {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
+	}, [actualMode]);
+	return [isMounted ? actualMode : "auto", setMode] as const;
 };

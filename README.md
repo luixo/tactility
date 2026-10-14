@@ -15,3 +15,12 @@ bun install
 ```sh
 bun run dev
 ```
+
+### Checks
+
+```sh
+bun run format:verify
+bun run lint
+bun run typecheck
+bun run build
+```

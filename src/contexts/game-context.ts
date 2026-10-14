@@ -1,5 +1,4 @@
 import React from "react";
-
 import type { getGame } from "~/server/handlers/games";
 
 export type GameContextType = Awaited<ReturnType<typeof getGame>>;
